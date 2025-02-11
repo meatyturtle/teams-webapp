@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph API Demo</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>Welcome to the Graph API Demo</h1>
+    <button id="fetchUserData">Fetch User Data</button>
+    <div id="output">
+        <p>Response will appear here...</p>
+    </div>
+    <a href="/send-teams-chat">Send Message to Teams Chat</a>
+
+
+    <script>
+        document.getElementById('fetchUserData').addEventListener('click', async () => {
+            const outputElement = document.getElementById('output');
+            outputElement.innerHTML = 'Loading...';
+
+            try {
+                const response = await fetch('/graph/user-cli');
+                if (response.ok) {
+                    const data = await response.json();
+                    outputElement.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    const error = await response.json();
+                    outputElement.innerHTML = `<strong>Error:</strong> ${error.details || error.error}`;
+                }
+            } catch (error) {
+                outputElement.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
